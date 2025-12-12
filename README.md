@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.1.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/python-3.7+-green.svg" alt="Python">
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg" alt="Platform">
   <img src="https://img.shields.io/badge/license-MIT-orange.svg" alt="License">
@@ -15,12 +15,12 @@
 
 <p align="center">
   <a href="#features">Features</a> •
-  <a href="#supported-systems">Supported Systems</a> •
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
-  <a href="#screenshots">Screenshots</a> •
-  <a href="#updating">Updating</a> •
-  <a href="#license">License</a>
+  <a href="#themes">Themes</a> •
+  <a href="#keyboard-shortcuts">Keyboard Shortcuts</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#screenshots">Screenshots</a>
 </p>
 
 ---
@@ -34,69 +34,53 @@
  ╚══╝╚══╝ ╚══════╝╚══════╝╚══════╝╚══════╝
 ```
 
-## Overview
+## What's New in v2.0.0
 
-**Wellz** is a btop-inspired, lightweight system monitoring tool designed for gamers and power users. It features a beautiful terminal dashboard with ASCII art OS logos and a sleek desktop widget that stays on top of your screen.
+- **Interactive Dashboard** - Full btop-style TUI with keyboard navigation
+- **Real-time Graphs** - Braille-rendered CPU, Memory, Network, and Disk I/O graphs
+- **8 Built-in Themes** - Default, Dracula, Nord, Gruvbox, Monokai, Solarized, Tokyo Night, Catppuccin
+- **Process Manager** - View, sort, filter, and kill processes with vim-style controls
+- **Config File Support** - Customize via `~/.config/wellz/config.toml`
+- **Updated GUI Widget** - Graphs, themes, detailed system info
 
 ---
 
 ## Features
 
-### Terminal Dashboard (btop-style)
-- **Side-by-Side Panel Layout** - Clean, organized information display
-- **OS Detection with ASCII Logos** - Automatically detects your OS and shows its logo
-- **Per-Core CPU Usage** - Visual bars for each CPU core
-- **Live Mode** - Real-time updating with customizable refresh rate
-- **Color-Coded Metrics** - Green (0-49%), Yellow (50-79%), Red (80-100%)
-- **No Emojis** - Clean ASCII-only interface
+### Interactive Terminal Dashboard
+- **Braille Graphs** - High-resolution history graphs for CPU, Memory, Network, Disk
+- **Process Manager** - Sort by CPU/MEM/PID, filter with `/`, kill with `K`
+- **Vim-style Navigation** - `j/k` scroll, `g/G` top/bottom, `/` search
+- **Theme Switching** - Press `c` to cycle through 8 themes
+- **Panel Toggling** - Number keys `1-6` toggle sections on/off
+- **Responsive Layout** - Adapts to terminal size
 
 ### Desktop Widget (GUI)
-- **Always-On-Top** - Stays visible while gaming or working
-- **Dark Theme** - btop-inspired dark color scheme
-- **Draggable** - Position it anywhere on your screen
-- **OS Badge** - Shows detected operating system
+- **Always-On-Top** - Stays visible while gaming
+- **Mini Graphs** - Sparkline graphs for CPU, GPU, Memory
+- **5 Themes** - Click Theme button to cycle
+- **Detailed Info** - CPU name, GPU name/temp/VRAM, OS, uptime
+- **Draggable** - Position anywhere on screen
 
 ### Hardware Monitoring
 
 | Component | Metrics |
 |-----------|---------|
-| **CPU** | Model, Total Usage %, Per-Core Usage, Frequency, Cores/Threads |
-| **GPU** | Model, Usage %, VRAM Used/Total, Temperature (NVIDIA) |
-| **Memory** | RAM Used/Total, Available, Swap Usage |
-| **Disk** | Multiple partitions, Used/Total per mount |
-| **Network** | Hostname, IP addresses, TX/RX totals |
-| **System** | OS, Kernel, Architecture, Uptime |
-
----
-
-## Supported Systems
-
-Wellz automatically detects your operating system and displays the appropriate ASCII logo:
-
-### Linux Distributions
-| Distro | Logo | Distro | Logo |
-|--------|------|--------|------|
-| Kali Linux | Dragon | Arch Linux | Arch symbol |
-| Ubuntu | Circle of friends | Debian | Swirl |
-| Fedora | Infinity | Manjaro | Bars |
-| Linux Mint | Leaf | Pop!_OS | Pop |
-| Red Hat | Hat | openSUSE | Chameleon |
-| Generic Linux | Tux | | |
-
-### Other Platforms
-| Platform | Support |
-|----------|---------|
-| **macOS** | Full support with Apple logo |
-| **Windows** | Full support with Windows logo |
+| **CPU** | Model name, Usage %, Per-core bars, Frequency, Cores/Threads, History graph |
+| **GPU** | Model name, Usage %, VRAM Used/Total, Temperature (NVIDIA) |
+| **Memory** | RAM Used/Total/Available, Swap, History graph |
+| **Disk** | Multiple partitions, Used/Total, I/O speed graph |
+| **Network** | Hostname, IP addresses, TX/RX speeds, History graph |
+| **Processes** | PID, User, CPU%, MEM%, Name, Tree view |
 
 ---
 
 ## Installation
 
 ### Prerequisites
-- Python 3.7 or higher
-- pip (Python package manager)
-- For GUI: Tkinter (usually pre-installed)
+- Python 3.7+
+- pip
+- For GUI: Tkinter (`python3-tk`)
 
 ### Quick Install
 
@@ -105,7 +89,7 @@ Wellz automatically detects your operating system and displays the appropriate A
 git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
 cd Live-Computer-stats-WELLZ-
 
-# Install the package
+# Install
 pip install .
 ```
 
@@ -115,142 +99,230 @@ pip install .
 # User install (no sudo)
 pip install . --user
 
-# System-wide
-sudo pip install .
-
 # Development mode
 pip install -e .
-```
 
-### Post-Installation
-
-Add to your PATH if needed:
-```bash
-export PATH="$HOME/.local/bin:$PATH"
+# Force reinstall
+pip install . --force-reinstall
 ```
 
 ---
 
 ## Usage
 
-### Terminal Dashboard
+### Interactive Dashboard (Default)
 
 ```bash
-# Show stats once
-wellz
+wellz                  # Launch interactive dashboard
+wellz --theme dracula  # Start with specific theme
+wellz --config ~/my.toml  # Use custom config
+```
 
-# Live mode (continuous updates)
-wellz -l
+### Legacy Modes
 
-# Live mode with 2 second refresh
-wellz -l -i 2
-
-# Show help
-wellz --help
+```bash
+wellz -s              # Static output (show once and exit)
+wellz -l              # Legacy live mode (no keyboard controls)
+wellz -l -i 2         # Legacy live with 2s refresh
 ```
 
 ### Desktop Widget
 
 ```bash
-# Launch GUI widget
-wellz-gui
+wellz-gui             # Launch GUI widget
 ```
 
-### Commands
+### All Options
 
 | Command | Description |
 |---------|-------------|
-| `wellz` | Show stats once |
-| `wellz -l` | Live mode (1s refresh) |
-| `wellz -l -i N` | Live mode (N second refresh) |
+| `wellz` | Interactive dashboard (default) |
+| `wellz -s` | Static output |
+| `wellz -l` | Legacy live mode |
+| `wellz -l -i N` | Legacy live, N second refresh |
+| `wellz --theme NAME` | Use specific theme |
+| `wellz --config PATH` | Use custom config file |
 | `wellz-gui` | Desktop widget |
 
 ---
 
-## Screenshots
+## Keyboard Shortcuts
 
-### Terminal Dashboard (Kali Linux)
-```
-╭─ SYSTEM ──────────────────────────────╮  ╭─ CPU ───────────────────────────────╮
-│ OS      Linux 6.1.0-kali              │  │ Intel(R) Core(TM) i5-6500 CPU @ ... │
-│ Host    gaming-pc                     │  │ Cores 4  Threads 4  Freq 3200MHz   │
-│ Arch    x86_64                        │  ├──────────────────────────────────────┤
-│ Uptime  5h 32m                        │  │ Total  [████████░░░░░░░░░░░░]  42.5% │
-├──────────────────────────────────────┤  │ 0██   1███  2█    3████              │
-│       ..                              │  ╰──────────────────────────────────────╯
-│     .WWWW.                            │
-│    .WW  WW.      KALI LINUX           │
-│   .WW    WW.                          │
-│   WW  ..  WW                          │
-│   WW WWWW WW                          │
-│    WW    WW                           │
-╰──────────────────────────────────────╯
+### Navigation
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Move down |
+| `k` / `Up` | Move up |
+| `g` | Go to top |
+| `G` | Go to bottom |
+| `Tab` | Next section |
 
-╭─ GPU ─────────────────────────────────╮  ╭─ MEMORY ────────────────────────────╮
-│ NVIDIA GeForce RTX 3080               │  │ RAM    [████████████░░░░░░░░] 12.4/32.0GB │
-│ Usage  [██████░░░░░░░░░░░░░░]  23.0%  │  │ Avail  19.6GB                       │
-│ VRAM   [████░░░░░░░░░░░░░░░░] 2048/10240MB │  │ Swap   [░░░░░░░░░░░░░░░░░░░░] 0.0/8.0GB │
-│ Temp   45C                            │  ╰──────────────────────────────────────╯
-╰──────────────────────────────────────╯
+### Process Management
+| Key | Action |
+|-----|--------|
+| `/` | Search/filter processes |
+| `Enter` | Select process |
+| `K` | Kill selected process (SIGTERM) |
+| `S` | Signal menu (SIGKILL, SIGHUP, etc.) |
+| `t` | Toggle tree view |
 
-╭─ DISK ────────────────────────────────╮  ╭─ NETWORK ───────────────────────────╮
-│ /          [████████░░░░░░░] 256/512GB │  │ Host  gaming-pc                     │
-│ /home      [██████░░░░░░░░░] 128/256GB │  │ eth0  192.168.1.100                 │
-╰──────────────────────────────────────╯  ├──────────────────────────────────────┤
-                                          │ TX 1.5GB         RX 8.2GB            │
-                                          ╰──────────────────────────────────────╯
-```
+### Display
+| Key | Action |
+|-----|--------|
+| `1` | Toggle CPU panel |
+| `2` | Toggle Memory panel |
+| `3` | Toggle Network panel |
+| `4` | Toggle Disk panel |
+| `5` | Toggle GPU panel |
+| `6` | Toggle Process panel |
+| `c` | Cycle themes |
+| `+` / `-` | Adjust refresh rate |
+| `r` | Reset view |
 
-### Color Coding
-
-| Color | Usage | Status |
-|-------|-------|--------|
-| Green | 0-49% | Healthy |
-| Yellow | 50-79% | Moderate |
-| Red | 80-100% | High Load |
+### General
+| Key | Action |
+|-----|--------|
+| `?` | Help overlay |
+| `q` | Quit |
 
 ---
 
-## Updating
+## Themes
 
-```bash
-# Navigate to repo
-cd Live-Computer-stats-WELLZ-
+8 built-in themes available:
 
-# Pull latest
-git pull origin main
+| Theme | Description |
+|-------|-------------|
+| `default` | Dark blue/cyan (GitHub-inspired) |
+| `dracula` | Purple/pink/cyan |
+| `nord` | Arctic blue/frost |
+| `gruvbox` | Warm retro orange/yellow |
+| `monokai` | Classic Monokai |
+| `solarized` | Solarized dark |
+| `tokyo` | Tokyo Night |
+| `catppuccin` | Catppuccin Mocha |
 
-# Reinstall
-pip install . --upgrade
-```
-
-**Or fresh install:**
-```bash
-pip uninstall wellz
-rm -rf Live-Computer-stats-WELLZ-
-git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
-cd Live-Computer-stats-WELLZ-
-pip install .
-```
+Switch themes:
+- **CLI**: Press `c` or use `--theme NAME`
+- **GUI**: Click "Theme" button
 
 ---
 
 ## Configuration
 
-### GPU Support
+Wellz reads config from `~/.config/wellz/config.toml`
 
-| GPU | Support Level |
-|-----|---------------|
+### Example Config
+
+```toml
+[general]
+refresh_rate = 1.0
+history_size = 120
+
+[display]
+show_cpu = true
+show_memory = true
+show_network = true
+show_disk = true
+show_gpu = true
+show_processes = true
+graph_style = "braille"  # braille, block, ascii
+
+[theme]
+name = "dracula"
+
+[processes]
+sort_by = "cpu"
+sort_descending = true
+tree_view = false
+```
+
+### Graph Styles
+
+| Style | Description |
+|-------|-------------|
+| `braille` | High-resolution using braille characters (default) |
+| `block` | Block characters (▁▂▃▄▅▆▇█) |
+| `ascii` | ASCII-only fallback |
+
+---
+
+## Screenshots
+
+### Interactive Dashboard
+```
+┌─ CPU ─────────────────────────┐┌─ MEMORY ──────────────────────┐
+│ Intel Core i5-6500 @ 3.2GHz   ││ RAM  [████████░░] 8.2/16.0 GB │
+│ ⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿ 42%            ││ ⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿ 51%            │
+│ Core 0 [████░░] 45%           ││ Swap [░░░░░░░░░░] 0.0/8.0 GB  │
+│ Core 1 [██░░░░] 23%           │└───────────────────────────────┘
+│ Core 2 [███░░░] 38%           │┌─ NETWORK ─────────────────────┐
+│ Core 3 [█░░░░░] 12%           ││ ↑ 1.2 MB/s    ↓ 5.4 MB/s     │
+└───────────────────────────────┘│ ⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿              │
+┌─ GPU ─────────────────────────┐│ TX: 1.5 GB    RX: 8.2 GB     │
+│ NVIDIA GeForce RTX 3080       │└───────────────────────────────┘
+│ Usage [██████░░░░] 23%        │┌─ PROCESSES ───────────────────┐
+│ VRAM  2048/10240 MB           ││ PID   CPU%  MEM%  NAME        │
+│ Temp  45°C                    ││ 1234  45.2  12.3  firefox     │
+└───────────────────────────────┘│ 5678   8.1   4.2  code        │
+                                 │ 9012   3.2   2.1  terminal    │
+                                 └───────────────────────────────┘
+```
+
+### GUI Widget
+- Always-on-top floating widget
+- Shows CPU, GPU, Memory, Disk, Network
+- Mini sparkline graphs
+- Theme switching
+
+---
+
+## Supported Systems
+
+### Linux Distributions
+Kali, Arch, Ubuntu, Debian, Fedora, Manjaro, Mint, Pop!_OS, Red Hat, openSUSE
+
+### Other Platforms
+- **macOS** - Full support
+- **Windows** - Full support
+
+### GPU Support
+| GPU | Support |
+|-----|---------|
 | NVIDIA | Full (usage, VRAM, temp via nvidia-smi) |
-| AMD | Detection only (full support coming) |
+| AMD | Detection only |
 | Intel | Detection only |
 
-### Dependencies
+---
 
-| Package | Purpose | Required |
-|---------|---------|----------|
-| `psutil` | System metrics | Yes |
-| `tkinter` | GUI widget | For GUI only |
+## Project Structure
+
+```
+wellz/
+├── wellz/
+│   ├── __init__.py
+│   ├── cli.py              # Main entry point
+│   ├── gui.py              # Desktop widget
+│   ├── core/
+│   │   ├── collectors.py   # Data collection
+│   │   └── history.py      # Graph history buffers
+│   ├── config/
+│   │   ├── manager.py      # Config loading
+│   │   ├── themes.py       # Theme definitions
+│   │   └── default.toml    # Default config
+│   ├── ui/
+│   │   ├── app.py          # Main TUI application
+│   │   ├── input_handler.py
+│   │   ├── layout.py
+│   │   ├── widgets/        # Graph, bar, box widgets
+│   │   └── panels/         # CPU, Memory, GPU, etc. panels
+│   └── process/
+│       ├── manager.py      # Process listing
+│       └── signals.py      # Kill/signal utilities
+├── setup.py
+├── pyproject.toml
+└── README.md
+```
 
 ---
 
@@ -261,7 +333,7 @@ pip install .
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-### Tkinter not found
+### Tkinter not found (for GUI)
 ```bash
 # Debian/Ubuntu/Kali
 sudo apt install python3-tk
@@ -275,39 +347,18 @@ sudo pacman -S tk
 
 ### No GPU stats
 ```bash
-# Check nvidia-smi
-nvidia-smi
+nvidia-smi  # Check if nvidia-smi works
 ```
 
 ---
 
-## Project Structure
+## Updating
 
+```bash
+cd Live-Computer-stats-WELLZ-
+git pull origin main
+pip install . --force-reinstall
 ```
-wellz/
-├── wellz/
-│   ├── __init__.py      # Package info
-│   ├── cli.py           # Terminal dashboard
-│   └── gui.py           # Desktop widget
-├── setup.py
-├── pyproject.toml
-├── README.md
-└── LICENSE
-```
-
----
-
-## Roadmap
-
-- [x] btop-style interface
-- [x] OS detection with ASCII logos
-- [x] Per-core CPU monitoring
-- [x] GPU temperature (NVIDIA)
-- [ ] AMD GPU full support
-- [ ] CPU temperature
-- [ ] Fan speed monitoring
-- [ ] Custom themes
-- [ ] Config file support
 
 ---
 
@@ -324,5 +375,5 @@ MIT License - see [LICENSE](LICENSE)
 ---
 
 <p align="center">
-  <b>If you find Wellz useful, give it a star on GitHub!</b>
+  <b>If you find Wellz useful, give it a star!</b>
 </p>

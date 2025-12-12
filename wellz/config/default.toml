@@ -1,0 +1,123 @@
+# Wellz Configuration File
+# Location: ~/.config/wellz/config.toml
+
+[general]
+# Refresh rate in seconds (0.5 - 10.0)
+refresh_rate = 1.0
+
+# History size for graphs (number of data points)
+# Higher = longer history, more memory
+history_size = 120
+
+# Layout style: "default", "compact", "expanded"
+layout = "default"
+
+[display]
+# Show/hide panels
+show_cpu = true
+show_memory = true
+show_network = true
+show_disk = true
+show_gpu = true
+show_processes = true
+
+# Graph rendering style: "braille", "block", "ascii"
+# braille: Smooth high-resolution using braille characters
+# block: Block characters (more compatible)
+# ascii: Plain ASCII (most compatible)
+graph_style = "braille"
+
+# Show mini graphs in panels
+show_graphs = true
+
+# Graph height in lines
+graph_height = 5
+
+# Show per-core CPU usage
+show_per_core = true
+
+# Maximum cores to display (0 = all)
+max_cores = 8
+
+# Maximum disks to display (0 = all)
+max_disks = 4
+
+# Maximum network interfaces to display (0 = all)
+max_interfaces = 2
+
+[theme]
+# Theme name: "default", "dracula", "nord", "gruvbox", "monokai", "solarized", "tokyo", "catppuccin"
+name = "default"
+
+# Custom colors (override theme colors)
+# Use hex format: "#RRGGBB" or empty string to use theme default
+[theme.custom]
+# title = ""
+# border = ""
+# low = ""
+# mid = ""
+# high = ""
+
+[processes]
+# Sort by: "cpu", "memory", "pid", "name"
+sort_by = "cpu"
+
+# Sort direction (true = descending for cpu/memory, ascending for name/pid)
+sort_descending = true
+
+# Show process tree view
+tree_view = false
+
+# Number of processes to display
+max_processes = 20
+
+# Update processes every N refresh cycles (reduces CPU usage)
+update_interval = 2
+
+[keybindings]
+# Vim-style navigation enabled
+vim_mode = true
+
+# Custom key bindings (key = action)
+# Available actions: quit, up, down, top, bottom, search, kill, signal,
+#                   toggle_cpu, toggle_memory, toggle_network, toggle_disk,
+#                   toggle_gpu, toggle_processes, toggle_tree, help,
+#                   theme_next, theme_prev, refresh_up, refresh_down
+
+# Examples (uncomment to override defaults):
+# q = "quit"
+# j = "down"
+# k = "up"
+# g = "top"
+# G = "bottom"
+# "/" = "search"
+# K = "kill"
+# s = "signal"
+# 1 = "toggle_cpu"
+# 2 = "toggle_memory"
+# 3 = "toggle_network"
+# 4 = "toggle_disk"
+# 5 = "toggle_gpu"
+# p = "toggle_processes"
+# t = "toggle_tree"
+# "?" = "help"
+# c = "theme_next"
+# C = "theme_prev"
+# "+" = "refresh_up"
+# "-" = "refresh_down"
+
+[advanced]
+# Enable mouse support (if terminal supports it)
+mouse_enabled = true
+
+# Show FPS counter (for debugging)
+show_fps = false
+
+# Use Unicode box drawing characters
+unicode_borders = true
+
+# Network speed unit: "auto", "bits", "bytes"
+network_unit = "auto"
+
+# Temperature unit: "celsius", "fahrenheit"
+temp_unit = "celsius"

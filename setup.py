@@ -8,10 +8,10 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="wellz",
-    version="1.1.0",
+    version="2.0.0",
     author="Wellz26",
     author_email="wellz26@github.com",
-    description="A visually artistic gaming PC stats dashboard for your terminal",
+    description="A btop-inspired gaming PC stats dashboard for your terminal",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Wellz26/Live-Computer-stats-WELLZ-",
@@ -36,6 +36,7 @@ setup(
     python_requires=">=3.7",
     install_requires=[
         "psutil>=5.9.0",
+        "tomli>=2.0.0;python_version<'3.11'",
     ],
     entry_points={
         "console_scripts": [
@@ -43,5 +44,5 @@ setup(
             "wellz-gui=wellz.gui:main",
         ],
     },
-    keywords="system monitor gaming pc stats terminal cli dashboard",
+    keywords="system monitor gaming pc stats terminal cli dashboard btop htop",
 )

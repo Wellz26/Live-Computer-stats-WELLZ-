@@ -11,60 +11,83 @@
   <br>
 </h1>
 
-<h4 align="center">A Beautiful Gaming PC Stats Dashboard for Your Terminal & Desktop</h4>
+<h4 align="center">A btop-Inspired Gaming PC Stats Dashboard for Your Terminal & Desktop</h4>
 
 <p align="center">
   <a href="#features">Features</a> •
+  <a href="#supported-systems">Supported Systems</a> •
   <a href="#installation">Installation</a> •
-  <a href="#updating">Updating</a> •
   <a href="#usage">Usage</a> •
   <a href="#screenshots">Screenshots</a> •
-  <a href="#configuration">Configuration</a> •
+  <a href="#updating">Updating</a> •
   <a href="#license">License</a>
 </p>
 
 ---
 
 ```
-    ██╗    ██╗███████╗██╗     ██╗     ███████╗
-    ██║    ██║██╔════╝██║     ██║     ╚══███╔╝
-    ██║ █╗ ██║█████╗  ██║     ██║       ███╔╝
-    ██║███╗██║██╔══╝  ██║     ██║      ███╔╝
-    ╚███╔███╔╝███████╗███████╗███████╗███████╗
-     ╚══╝╚══╝ ╚══════╝╚══════╝╚══════╝╚══════╝
-         ⚡ Gaming PC Stats Dashboard ⚡
+██╗    ██╗███████╗██╗     ██╗     ███████╗
+██║    ██║██╔════╝██║     ██║     ╚══███╔╝
+██║ █╗ ██║█████╗  ██║     ██║       ███╔╝
+██║███╗██║██╔══╝  ██║     ██║      ███╔╝
+╚███╔███╔╝███████╗███████╗███████╗███████╗
+ ╚══╝╚══╝ ╚══════╝╚══════╝╚══════╝╚══════╝
 ```
 
 ## Overview
 
-**Wellz** is a lightweight, visually stunning system monitoring tool designed for gamers and power users. It provides real-time hardware statistics through both a colorful terminal interface and a sleek desktop widget that stays on top of your screen.
-
-Whether you're gaming, streaming, or just want to keep an eye on your system's performance, Wellz delivers the information you need in style.
+**Wellz** is a btop-inspired, lightweight system monitoring tool designed for gamers and power users. It features a beautiful terminal dashboard with ASCII art OS logos and a sleek desktop widget that stays on top of your screen.
 
 ---
 
 ## Features
 
-### Terminal Dashboard
-- **ASCII Art Interface** - Beautiful box-drawing characters and colored output
-- **Live Mode** - Real-time updating stats with customizable refresh rate
-- **Color-Coded Metrics** - Green (healthy), Yellow (moderate), Red (high load)
+### Terminal Dashboard (btop-style)
+- **Side-by-Side Panel Layout** - Clean, organized information display
+- **OS Detection with ASCII Logos** - Automatically detects your OS and shows its logo
+- **Per-Core CPU Usage** - Visual bars for each CPU core
+- **Live Mode** - Real-time updating with customizable refresh rate
+- **Color-Coded Metrics** - Green (0-49%), Yellow (50-79%), Red (80-100%)
+- **No Emojis** - Clean ASCII-only interface
 
 ### Desktop Widget (GUI)
 - **Always-On-Top** - Stays visible while gaming or working
-- **Dark Gaming Theme** - Sleek dark interface that looks great on any setup
+- **Dark Theme** - btop-inspired dark color scheme
 - **Draggable** - Position it anywhere on your screen
-- **Compact Design** - Minimal footprint, maximum information
+- **OS Badge** - Shows detected operating system
 
 ### Hardware Monitoring
+
 | Component | Metrics |
 |-----------|---------|
-| **CPU** | Model, Usage %, Frequency, Cores/Threads |
-| **GPU** | Model, Usage %, VRAM Used/Total (NVIDIA) |
-| **RAM** | Used/Total GB, Usage % |
-| **Disk** | Used/Total GB, Usage % |
-| **Network** | Hostname, IP, Upload/Download totals |
-| **System** | OS, Architecture, Uptime |
+| **CPU** | Model, Total Usage %, Per-Core Usage, Frequency, Cores/Threads |
+| **GPU** | Model, Usage %, VRAM Used/Total, Temperature (NVIDIA) |
+| **Memory** | RAM Used/Total, Available, Swap Usage |
+| **Disk** | Multiple partitions, Used/Total per mount |
+| **Network** | Hostname, IP addresses, TX/RX totals |
+| **System** | OS, Kernel, Architecture, Uptime |
+
+---
+
+## Supported Systems
+
+Wellz automatically detects your operating system and displays the appropriate ASCII logo:
+
+### Linux Distributions
+| Distro | Logo | Distro | Logo |
+|--------|------|--------|------|
+| Kali Linux | Dragon | Arch Linux | Arch symbol |
+| Ubuntu | Circle of friends | Debian | Swirl |
+| Fedora | Infinity | Manjaro | Bars |
+| Linux Mint | Leaf | Pop!_OS | Pop |
+| Red Hat | Hat | openSUSE | Chameleon |
+| Generic Linux | Tux | | |
+
+### Other Platforms
+| Platform | Support |
+|----------|---------|
+| **macOS** | Full support with Apple logo |
+| **Windows** | Full support with Windows logo |
 
 ---
 
@@ -73,7 +96,7 @@ Whether you're gaming, streaming, or just want to keep an eye on your system's p
 ### Prerequisites
 - Python 3.7 or higher
 - pip (Python package manager)
-- For GUI: Tkinter (usually pre-installed on Linux)
+- For GUI: Tkinter (usually pre-installed)
 
 ### Quick Install
 
@@ -86,71 +109,24 @@ cd Live-Computer-stats-WELLZ-
 pip install .
 ```
 
-That's it! Now you can run `wellz` or `wellz-gui` from anywhere.
+### Alternative Methods
 
-### Alternative Installation Methods
-
-**Using pip with user flag (no sudo required):**
 ```bash
+# User install (no sudo)
 pip install . --user
-```
 
-**System-wide installation:**
-```bash
+# System-wide
 sudo pip install .
-```
 
-**Development mode (for contributors):**
-```bash
+# Development mode
 pip install -e .
-```
-
----
-
-## Updating
-
-To update to the latest version:
-
-```bash
-# Navigate to the cloned repository
-cd Live-Computer-stats-WELLZ-
-
-# Pull the latest changes
-git pull origin main
-
-# Reinstall the package
-pip install . --upgrade
-```
-
-**Or fresh install:**
-```bash
-# Remove old version
-pip uninstall wellz
-
-# Clone fresh and install
-git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
-cd Live-Computer-stats-WELLZ-
-pip install .
-```
-
-### Check Current Version
-
-```bash
-wellz --help
-# or
-pip show wellz
 ```
 
 ### Post-Installation
 
-After installation, ensure `~/.local/bin` is in your PATH:
-
+Add to your PATH if needed:
 ```bash
-# Add to ~/.bashrc or ~/.zshrc
 export PATH="$HOME/.local/bin:$PATH"
-
-# Reload your shell
-source ~/.bashrc
 ```
 
 ---
@@ -160,13 +136,13 @@ source ~/.bashrc
 ### Terminal Dashboard
 
 ```bash
-# Display stats once
+# Show stats once
 wellz
 
-# Live mode - continuous updates (default: 1 second refresh)
+# Live mode (continuous updates)
 wellz -l
 
-# Live mode with custom refresh interval (e.g., 2 seconds)
+# Live mode with 2 second refresh
 wellz -l -i 2
 
 # Show help
@@ -176,74 +152,86 @@ wellz --help
 ### Desktop Widget
 
 ```bash
-# Launch the GUI widget
+# Launch GUI widget
 wellz-gui
 ```
 
-The widget will appear in the top-right corner of your screen. You can:
-- **Drag** it anywhere by clicking and dragging
-- **Close** it using the Close button or window controls
-
-### Command Reference
+### Commands
 
 | Command | Description |
 |---------|-------------|
-| `wellz` | Show stats once and exit |
-| `wellz -l` | Live mode with 1s refresh |
-| `wellz -l -i <seconds>` | Live mode with custom refresh |
-| `wellz --help` | Show help message |
-| `wellz-gui` | Launch desktop widget |
+| `wellz` | Show stats once |
+| `wellz -l` | Live mode (1s refresh) |
+| `wellz -l -i N` | Live mode (N second refresh) |
+| `wellz-gui` | Desktop widget |
 
 ---
 
 ## Screenshots
 
-### Terminal Dashboard
+### Terminal Dashboard (Kali Linux)
 ```
-  ╭──────────────────────────────────────────────────────────╮
-  │  🖥️  SYSTEM                                               │
-  │  OS: Linux 6.1.0-amd64              Arch: x86_64         │
-  │  Uptime: 2:34:15                                         │
-  ╰──────────────────────────────────────────────────────────╯
+╭─ SYSTEM ──────────────────────────────╮  ╭─ CPU ───────────────────────────────╮
+│ OS      Linux 6.1.0-kali              │  │ Intel(R) Core(TM) i5-6500 CPU @ ... │
+│ Host    gaming-pc                     │  │ Cores 4  Threads 4  Freq 3200MHz   │
+│ Arch    x86_64                        │  ├──────────────────────────────────────┤
+│ Uptime  5h 32m                        │  │ Total  [████████░░░░░░░░░░░░]  42.5% │
+├──────────────────────────────────────┤  │ 0██   1███  2█    3████              │
+│       ..                              │  ╰──────────────────────────────────────╯
+│     .WWWW.                            │
+│    .WW  WW.      KALI LINUX           │
+│   .WW    WW.                          │
+│   WW  ..  WW                          │
+│   WW WWWW WW                          │
+│    WW    WW                           │
+╰──────────────────────────────────────╯
 
-  ╭──────────────────────────────────────────────────────────╮
-  │  🔥 CPU                                                   │
-  │  AMD Ryzen 9 5900X 12-Core Processor                     │
-  │  Cores: 12  Threads: 24  Freq: 3700MHz                   │
-  │  Usage: [████████████░░░░░░░░░░░░░░░░░░]  42.5%          │
-  ╰──────────────────────────────────────────────────────────╯
+╭─ GPU ─────────────────────────────────╮  ╭─ MEMORY ────────────────────────────╮
+│ NVIDIA GeForce RTX 3080               │  │ RAM    [████████████░░░░░░░░] 12.4/32.0GB │
+│ Usage  [██████░░░░░░░░░░░░░░]  23.0%  │  │ Avail  19.6GB                       │
+│ VRAM   [████░░░░░░░░░░░░░░░░] 2048/10240MB │  │ Swap   [░░░░░░░░░░░░░░░░░░░░] 0.0/8.0GB │
+│ Temp   45C                            │  ╰──────────────────────────────────────╯
+╰──────────────────────────────────────╯
 
-  ╭──────────────────────────────────────────────────────────╮
-  │  🎮 GPU                                                   │
-  │  NVIDIA GeForce RTX 3080                                 │
-  │  Usage: [██████░░░░░░░░░░░░░░░░░░░░░░░░]  23.0%          │
-  │  VRAM:  [████████░░░░░░░░░░░░░░░░░░░░░░] 2048/10240 MB   │
-  ╰──────────────────────────────────────────────────────────╯
-
-  ╭──────────────────────────────────────────────────────────╮
-  │  💾 RAM                                                   │
-  │  Memory: [████████████████░░░░░░░░░░░░░░] 12.4/32.0 GB   │
-  ╰──────────────────────────────────────────────────────────╯
-
-  ╭──────────────────────────────────────────────────────────╮
-  │  💿 DISK                                                  │
-  │  Storage: [████████████████████░░░░░░░░░░] 512/1024 GB   │
-  ╰──────────────────────────────────────────────────────────╯
-
-  ╭──────────────────────────────────────────────────────────╮
-  │  🌐 NETWORK                                               │
-  │  Host: gaming-pc                IP: 192.168.1.100        │
-  │  ↑ Sent: 1542.3 MB    ↓ Recv: 8234.1 MB                  │
-  ╰──────────────────────────────────────────────────────────╯
+╭─ DISK ────────────────────────────────╮  ╭─ NETWORK ───────────────────────────╮
+│ /          [████████░░░░░░░] 256/512GB │  │ Host  gaming-pc                     │
+│ /home      [██████░░░░░░░░░] 128/256GB │  │ eth0  192.168.1.100                 │
+╰──────────────────────────────────────╯  ├──────────────────────────────────────┤
+                                          │ TX 1.5GB         RX 8.2GB            │
+                                          ╰──────────────────────────────────────╯
 ```
 
-### Color Coding System
+### Color Coding
 
-| Color | Usage Level | Status |
-|-------|-------------|--------|
-| 🟢 Green | 0% - 49% | Healthy |
-| 🟡 Yellow | 50% - 79% | Moderate |
-| 🔴 Red | 80% - 100% | High Load |
+| Color | Usage | Status |
+|-------|-------|--------|
+| Green | 0-49% | Healthy |
+| Yellow | 50-79% | Moderate |
+| Red | 80-100% | High Load |
+
+---
+
+## Updating
+
+```bash
+# Navigate to repo
+cd Live-Computer-stats-WELLZ-
+
+# Pull latest
+git pull origin main
+
+# Reinstall
+pip install . --upgrade
+```
+
+**Or fresh install:**
+```bash
+pip uninstall wellz
+rm -rf Live-Computer-stats-WELLZ-
+git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
+cd Live-Computer-stats-WELLZ-
+pip install .
+```
 
 ---
 
@@ -251,19 +239,11 @@ The widget will appear in the top-right corner of your screen. You can:
 
 ### GPU Support
 
-**NVIDIA GPUs:**
-Full support including usage percentage and VRAM monitoring. Requires `nvidia-smi` (included with NVIDIA drivers).
-
-```bash
-# Verify nvidia-smi is available
-nvidia-smi
-```
-
-**AMD GPUs:**
-Basic detection via `lspci`. Full monitoring support coming in future releases.
-
-**Intel Integrated Graphics:**
-Basic detection supported.
+| GPU | Support Level |
+|-----|---------------|
+| NVIDIA | Full (usage, VRAM, temp via nvidia-smi) |
+| AMD | Detection only (full support coming) |
+| Intel | Detection only |
 
 ### Dependencies
 
@@ -272,7 +252,32 @@ Basic detection supported.
 | `psutil` | System metrics | Yes |
 | `tkinter` | GUI widget | For GUI only |
 
-Dependencies are automatically installed when using pip.
+---
+
+## Troubleshooting
+
+### Command not found
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+### Tkinter not found
+```bash
+# Debian/Ubuntu/Kali
+sudo apt install python3-tk
+
+# Fedora
+sudo dnf install python3-tkinter
+
+# Arch
+sudo pacman -S tk
+```
+
+### No GPU stats
+```bash
+# Check nvidia-smi
+nvidia-smi
+```
 
 ---
 
@@ -281,99 +286,43 @@ Dependencies are automatically installed when using pip.
 ```
 wellz/
 ├── wellz/
-│   ├── __init__.py      # Package initialization
+│   ├── __init__.py      # Package info
 │   ├── cli.py           # Terminal dashboard
 │   └── gui.py           # Desktop widget
-├── setup.py             # Package setup (legacy)
-├── pyproject.toml       # Modern Python packaging
-├── README.md            # Documentation
-└── LICENSE              # MIT License
+├── setup.py
+├── pyproject.toml
+├── README.md
+└── LICENSE
 ```
-
----
-
-## Troubleshooting
-
-### Command not found after installation
-
-Add the local bin directory to your PATH:
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-### Tkinter not found (GUI)
-
-Install Tkinter for your distribution:
-
-```bash
-# Debian/Ubuntu
-sudo apt install python3-tk
-
-# Fedora
-sudo dnf install python3-tkinter
-
-# Arch Linux
-sudo pacman -S tk
-```
-
-### No GPU stats showing
-
-Ensure NVIDIA drivers and `nvidia-smi` are properly installed:
-```bash
-# Check if nvidia-smi works
-nvidia-smi
-
-# Install NVIDIA drivers (Ubuntu)
-sudo apt install nvidia-driver-XXX
-```
-
-### Permission errors
-
-Use the `--user` flag with pip:
-```bash
-pip install . --user
-```
-
----
-
-## Contributing
-
-Contributions are welcome! Feel free to:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ---
 
 ## Roadmap
 
-- [ ] AMD GPU full monitoring support
-- [ ] Temperature readings (CPU/GPU)
+- [x] btop-style interface
+- [x] OS detection with ASCII logos
+- [x] Per-core CPU monitoring
+- [x] GPU temperature (NVIDIA)
+- [ ] AMD GPU full support
+- [ ] CPU temperature
 - [ ] Fan speed monitoring
-- [ ] Custom themes for GUI
-- [ ] Configuration file support
-- [ ] System tray integration
-- [ ] Windows support
+- [ ] Custom themes
+- [ ] Config file support
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE)
 
 ---
 
 ## Author
 
-**Wellz26**
-
-- GitHub: [@Wellz26](https://github.com/Wellz26)
+**Wellz26** - [@Wellz26](https://github.com/Wellz26)
 
 ---
 
 <p align="center">
-  <b>If you find Wellz useful, please consider giving it a ⭐ on GitHub!</b>
+  <b>If you find Wellz useful, give it a star on GitHub!</b>
 </p>

@@ -29,6 +29,13 @@ except ImportError:
     print("Error: psutil not installed. Run: pip install psutil")
     sys.exit(1)
 
+# Optional PIL for logo
+try:
+    from PIL import Image, ImageTk
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
+
 
 # ============================================================================
 # THEMES - Extended collection
@@ -666,6 +673,9 @@ class WellzWidget:
         self._create_disk_section()
         self._create_network_section()
         self._create_processes_section()
+        self._create_devices_section()
+        self._create_ports_section()
+        self._create_security_section()
         self._create_controls()
 
         # Dragging
@@ -763,6 +773,23 @@ class WellzWidget:
         title_frame = tk.Frame(self.header_frame, bg=self.colors["bg"])
         title_frame.pack(fill=tk.X)
 
+        # Logo
+        self.logo_image = None
+        self.logo_label = None
+        if HAS_PIL:
+            try:
+                logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
+                if os.path.exists(logo_path):
+                    img = Image.open(logo_path)
+                    img = img.resize((48, 48), Image.Resampling.LANCZOS)
+                    self.logo_image = ImageTk.PhotoImage(img)
+                    self.logo_label = tk.Label(title_frame, image=self.logo_image,
+                                              bg=self.colors["bg"])
+                    self.logo_label.image = self.logo_image  # Keep reference
+                    self.logo_label.pack(side=tk.LEFT, padx=(0, 10))
+            except Exception as e:
+                print(f"Logo error: {e}")
+
         self.title_label = tk.Label(title_frame, text="WELLZ",
                                    font=("Segoe UI", 24, "bold"),
                                    fg=self.colors["accent"],
@@ -794,6 +821,7 @@ class WellzWidget:
             ("host", "Host"),
             ("arch", "Arch"),
             ("uptime", "Uptime"),
+            ("battery", "Battery"),
         ]
 
         for key, label in info_items:
@@ -1096,51 +1124,178 @@ class WellzWidget:
 
     def _create_processes_section(self):
         """Create top processes section"""
-        card = self._create_card("TOP PROCESSES", self.colors["accent"])
+        card = self._create_card("TOP PROCESSES", self.colors["cpu"])
         self.proc_card = card
 
         # Header row
         header = tk.Frame(card["content"], bg=self.colors["bg_card"])
         header.pack(fill=tk.X, pady=(0, 4))
 
-        tk.Label(header, text="Name", width=20, anchor="w",
+        tk.Label(header, text="Name", width=18, anchor="w",
                 font=("Consolas", 8, "bold"),
                 fg=self.colors["text_dim"],
                 bg=self.colors["bg_card"]).pack(side=tk.LEFT)
-        tk.Label(header, text="CPU%", width=8, anchor="e",
+        tk.Label(header, text="CPU%", width=7, anchor="e",
                 font=("Consolas", 8, "bold"),
                 fg=self.colors["text_dim"],
                 bg=self.colors["bg_card"]).pack(side=tk.LEFT)
-        tk.Label(header, text="MEM%", width=8, anchor="e",
+        tk.Label(header, text="MEM%", width=7, anchor="e",
                 font=("Consolas", 8, "bold"),
                 fg=self.colors["text_dim"],
                 bg=self.colors["bg_card"]).pack(side=tk.LEFT)
 
-        # Process rows
+        # Process rows (reduced to 4)
         self.proc_rows = []
-        for i in range(5):
+        for i in range(4):
             row = tk.Frame(card["content"], bg=self.colors["bg_card"])
             row.pack(fill=tk.X, pady=1)
 
-            name = tk.Label(row, text="--", width=20, anchor="w",
+            name = tk.Label(row, text="--", width=18, anchor="w",
                            font=("Consolas", 9),
                            fg=self.colors["text"],
                            bg=self.colors["bg_card"])
             name.pack(side=tk.LEFT)
 
-            cpu = tk.Label(row, text="--", width=8, anchor="e",
+            cpu = tk.Label(row, text="--", width=7, anchor="e",
                           font=("Consolas", 9),
                           fg=self.colors["cpu"],
                           bg=self.colors["bg_card"])
             cpu.pack(side=tk.LEFT)
 
-            mem = tk.Label(row, text="--", width=8, anchor="e",
+            mem = tk.Label(row, text="--", width=7, anchor="e",
                           font=("Consolas", 9),
                           fg=self.colors["mem"],
                           bg=self.colors["bg_card"])
             mem.pack(side=tk.LEFT)
 
             self.proc_rows.append({"name": name, "cpu": cpu, "mem": mem})
+
+    def _create_devices_section(self):
+        """Create connected devices section"""
+        card = self._create_card("CONNECTED DEVICES", self.colors["gpu"])
+        self.devices_card = card
+
+        # USB devices
+        usb_label = tk.Label(card["content"], text="USB Devices:",
+                            font=("Segoe UI", 9, "bold"),
+                            fg=self.colors["text_secondary"],
+                            bg=self.colors["bg_card"],
+                            anchor="w")
+        usb_label.pack(fill=tk.X, pady=(0, 2))
+
+        self.usb_rows = []
+        for i in range(3):
+            row = tk.Label(card["content"], text="--",
+                          font=("Consolas", 8),
+                          fg=self.colors["text"],
+                          bg=self.colors["bg_card"],
+                          anchor="w")
+            row.pack(fill=tk.X, pady=1)
+            self.usb_rows.append(row)
+
+        # Network interfaces
+        net_label = tk.Label(card["content"], text="Network Interfaces:",
+                            font=("Segoe UI", 9, "bold"),
+                            fg=self.colors["text_secondary"],
+                            bg=self.colors["bg_card"],
+                            anchor="w")
+        net_label.pack(fill=tk.X, pady=(6, 2))
+
+        self.net_iface_rows = []
+        for i in range(3):
+            row = tk.Label(card["content"], text="--",
+                          font=("Consolas", 8),
+                          fg=self.colors["text"],
+                          bg=self.colors["bg_card"],
+                          anchor="w")
+            row.pack(fill=tk.X, pady=1)
+            self.net_iface_rows.append(row)
+
+    def _create_ports_section(self):
+        """Create open ports section"""
+        card = self._create_card("OPEN PORTS", self.colors["warning"])
+        self.ports_card = card
+
+        # Header
+        header = tk.Frame(card["content"], bg=self.colors["bg_card"])
+        header.pack(fill=tk.X, pady=(0, 4))
+
+        tk.Label(header, text="Port", width=8, anchor="w",
+                font=("Consolas", 8, "bold"),
+                fg=self.colors["text_dim"],
+                bg=self.colors["bg_card"]).pack(side=tk.LEFT)
+        tk.Label(header, text="Proto", width=6, anchor="w",
+                font=("Consolas", 8, "bold"),
+                fg=self.colors["text_dim"],
+                bg=self.colors["bg_card"]).pack(side=tk.LEFT)
+        tk.Label(header, text="Service", width=18, anchor="w",
+                font=("Consolas", 8, "bold"),
+                fg=self.colors["text_dim"],
+                bg=self.colors["bg_card"]).pack(side=tk.LEFT)
+
+        # Port rows
+        self.port_rows = []
+        for i in range(5):
+            row = tk.Frame(card["content"], bg=self.colors["bg_card"])
+            row.pack(fill=tk.X, pady=1)
+
+            port = tk.Label(row, text="--", width=8, anchor="w",
+                           font=("Consolas", 9),
+                           fg=self.colors["warning"],
+                           bg=self.colors["bg_card"])
+            port.pack(side=tk.LEFT)
+
+            proto = tk.Label(row, text="--", width=6, anchor="w",
+                            font=("Consolas", 9),
+                            fg=self.colors["text_dim"],
+                            bg=self.colors["bg_card"])
+            proto.pack(side=tk.LEFT)
+
+            service = tk.Label(row, text="--", width=18, anchor="w",
+                              font=("Consolas", 9),
+                              fg=self.colors["text"],
+                              bg=self.colors["bg_card"])
+            service.pack(side=tk.LEFT)
+
+            self.port_rows.append({"port": port, "proto": proto, "service": service})
+
+    def _create_security_section(self):
+        """Create security status section"""
+        card = self._create_card("SECURITY STATUS", self.colors["danger"])
+        self.security_card = card
+
+        # Security indicators
+        self.security_items = {}
+
+        items = [
+            ("vpn", "VPN Status"),
+            ("firewall", "Firewall"),
+            ("ssh", "SSH Service"),
+            ("root_procs", "Root Processes"),
+            ("failed_logins", "Failed Logins (24h)"),
+            ("updates", "Security Updates"),
+        ]
+
+        for key, label in items:
+            row = tk.Frame(card["content"], bg=self.colors["bg_card"])
+            row.pack(fill=tk.X, pady=2)
+
+            lbl = tk.Label(row, text=f"{label}:",
+                          font=("Segoe UI", 9),
+                          fg=self.colors["text_dim"],
+                          bg=self.colors["bg_card"],
+                          width=18,
+                          anchor="w")
+            lbl.pack(side=tk.LEFT)
+
+            val = tk.Label(row, text="Checking...",
+                          font=("Segoe UI", 9, "bold"),
+                          fg=self.colors["text"],
+                          bg=self.colors["bg_card"],
+                          anchor="w")
+            val.pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+            self.security_items[key] = val
 
     def _create_controls(self):
         """Create control buttons"""
@@ -1193,6 +1348,33 @@ class WellzWidget:
                                      showvalue=False)
         self.opacity_scale.set(96)
         self.opacity_scale.pack(side=tk.LEFT)
+
+        # GitHub footer
+        self.footer_frame = tk.Frame(self.main_frame, bg=self.colors["bg"])
+        self.footer_frame.pack(fill=tk.X, pady=(10, 4))
+
+        self.github_label = tk.Label(self.footer_frame,
+                                    text="github.com/Wellz26",
+                                    font=("Segoe UI", 9),
+                                    fg=self.colors["accent"],
+                                    bg=self.colors["bg"],
+                                    cursor="hand2")
+        self.github_label.pack()
+
+        self.star_label = tk.Label(self.footer_frame,
+                                  text="If you like this project, leave a star!",
+                                  font=("Segoe UI", 8),
+                                  fg=self.colors["text_dim"],
+                                  bg=self.colors["bg"])
+        self.star_label.pack()
+
+        # Make GitHub link clickable
+        self.github_label.bind("<Button-1>", self._open_github)
+
+    def _open_github(self, event=None):
+        """Open GitHub page in browser"""
+        import webbrowser
+        webbrowser.open("https://github.com/Wellz26/Live-Computer-stats-WELLZ-")
 
     # ========================================================================
     # DATA COLLECTION
@@ -1343,6 +1525,191 @@ class WellzWidget:
         except:
             return "N/A"
 
+    def _get_usb_devices(self) -> List[str]:
+        """Get connected USB devices"""
+        devices = []
+        try:
+            result = subprocess.run(["lsusb"], capture_output=True, text=True, timeout=2)
+            if result.returncode == 0:
+                for line in result.stdout.strip().split("\n")[:6]:
+                    if line:
+                        # Extract device name (after ID xxxx:xxxx)
+                        parts = line.split(" ", 6)
+                        if len(parts) >= 7:
+                            devices.append(parts[6][:35])
+                        elif len(parts) >= 4:
+                            devices.append(" ".join(parts[3:])[:35])
+        except:
+            pass
+        return devices if devices else ["No USB devices found"]
+
+    def _get_network_interfaces(self) -> List[Dict]:
+        """Get network interfaces with status"""
+        interfaces = []
+        try:
+            stats = psutil.net_if_stats()
+            addrs = psutil.net_if_addrs()
+            for iface, stat in stats.items():
+                if iface != "lo" and stat.isup:
+                    ip = "No IP"
+                    if iface in addrs:
+                        for addr in addrs[iface]:
+                            if addr.family == socket.AF_INET:
+                                ip = addr.address
+                                break
+                    interfaces.append({
+                        "name": iface[:10],
+                        "ip": ip,
+                        "speed": f"{stat.speed}Mb" if stat.speed else "?"
+                    })
+        except:
+            pass
+        return interfaces[:3] if interfaces else [{"name": "None", "ip": "--", "speed": "--"}]
+
+    def _get_open_ports(self) -> List[Dict]:
+        """Get listening ports"""
+        ports = []
+        try:
+            connections = psutil.net_connections(kind='inet')
+            seen = set()
+            for conn in connections:
+                if conn.status == 'LISTEN' and conn.laddr.port not in seen:
+                    seen.add(conn.laddr.port)
+                    # Try to get service name
+                    try:
+                        service = socket.getservbyport(conn.laddr.port)
+                    except:
+                        service = "unknown"
+
+                    ports.append({
+                        "port": conn.laddr.port,
+                        "proto": "TCP",
+                        "service": service
+                    })
+            ports.sort(key=lambda x: x["port"])
+        except:
+            pass
+        return ports[:5] if ports else [{"port": "--", "proto": "--", "service": "No open ports"}]
+
+    def _get_security_status(self) -> Dict:
+        """Get security status indicators"""
+        status = {
+            "vpn": ("Disconnected", self.colors["text_dim"]),
+            "firewall": ("Unknown", self.colors["text_dim"]),
+            "ssh": ("Unknown", self.colors["text_dim"]),
+            "root_procs": ("0", self.colors["success"]),
+            "failed_logins": ("0", self.colors["success"]),
+            "updates": ("Unknown", self.colors["text_dim"]),
+        }
+
+        try:
+            # Check VPN status
+            try:
+                vpn_connected = False
+                vpn_name = ""
+
+                # Check for tun/tap interfaces (OpenVPN, WireGuard)
+                for iface in psutil.net_if_stats():
+                    if iface.startswith(('tun', 'tap', 'wg', 'proton', 'nord')):
+                        if psutil.net_if_stats()[iface].isup:
+                            vpn_connected = True
+                            vpn_name = iface
+                            break
+
+                # Check for VPN processes
+                if not vpn_connected:
+                    vpn_processes = ['openvpn', 'wireguard', 'nordvpn', 'protonvpn',
+                                    'expressvpn', 'mullvad', 'surfshark', 'windscribe']
+                    for proc in psutil.process_iter(['name']):
+                        try:
+                            pname = proc.info['name'].lower()
+                            for vpn in vpn_processes:
+                                if vpn in pname:
+                                    vpn_connected = True
+                                    vpn_name = vpn.upper()
+                                    break
+                        except:
+                            pass
+                        if vpn_connected:
+                            break
+
+                if vpn_connected:
+                    status["vpn"] = (f"Connected ({vpn_name})", self.colors["success"])
+                else:
+                    status["vpn"] = ("Disconnected", self.colors["danger"])
+            except:
+                pass
+
+            # Check firewall (ufw or iptables)
+            try:
+                result = subprocess.run(["ufw", "status"], capture_output=True, text=True, timeout=2)
+                if "active" in result.stdout.lower():
+                    status["firewall"] = ("Active", self.colors["success"])
+                elif "inactive" in result.stdout.lower():
+                    status["firewall"] = ("Inactive", self.colors["danger"])
+            except:
+                try:
+                    result = subprocess.run(["iptables", "-L", "-n"], capture_output=True, text=True, timeout=2)
+                    if result.returncode == 0 and len(result.stdout.split("\n")) > 5:
+                        status["firewall"] = ("iptables", self.colors["success"])
+                except:
+                    pass
+
+            # Check SSH
+            try:
+                result = subprocess.run(["systemctl", "is-active", "ssh"], capture_output=True, text=True, timeout=2)
+                if "active" in result.stdout:
+                    status["ssh"] = ("Running", self.colors["warning"])
+                else:
+                    status["ssh"] = ("Stopped", self.colors["success"])
+            except:
+                pass
+
+            # Count root processes
+            try:
+                root_count = 0
+                for proc in psutil.process_iter(['username']):
+                    try:
+                        if proc.info['username'] == 'root':
+                            root_count += 1
+                    except:
+                        pass
+                color = self.colors["success"] if root_count < 50 else self.colors["warning"]
+                status["root_procs"] = (str(root_count), color)
+            except:
+                pass
+
+            # Check failed logins
+            try:
+                result = subprocess.run(
+                    ["journalctl", "-u", "ssh", "--since", "24 hours ago", "--no-pager"],
+                    capture_output=True, text=True, timeout=3
+                )
+                failed = result.stdout.lower().count("failed") + result.stdout.lower().count("invalid")
+                color = self.colors["success"] if failed < 5 else (self.colors["warning"] if failed < 20 else self.colors["danger"])
+                status["failed_logins"] = (str(failed), color)
+            except:
+                pass
+
+            # Check for security updates
+            try:
+                result = subprocess.run(
+                    ["apt", "list", "--upgradable"],
+                    capture_output=True, text=True, timeout=5
+                )
+                updates = len([l for l in result.stdout.split("\n") if "security" in l.lower()])
+                if updates == 0:
+                    status["updates"] = ("Up to date", self.colors["success"])
+                else:
+                    status["updates"] = (f"{updates} pending", self.colors["warning"])
+            except:
+                pass
+
+        except:
+            pass
+
+        return status
+
     # ========================================================================
     # UI UPDATE
     # ========================================================================
@@ -1355,6 +1722,26 @@ class WellzWidget:
             self.root.after(0, lambda: self.sys_labels["host"].config(text=self.hostname))
             self.root.after(0, lambda: self.sys_labels["arch"].config(text=platform.machine()))
             self.root.after(0, lambda: self.sys_labels["uptime"].config(text=self._get_uptime()))
+
+            # Battery
+            battery = psutil.sensors_battery()
+            if battery:
+                pct = battery.percent
+                plugged = battery.power_plugged
+                if plugged:
+                    bat_text = f"{pct:.0f}% (Charging)"
+                    bat_color = self.colors["success"]
+                else:
+                    bat_text = f"{pct:.0f}%"
+                    if pct > 50:
+                        bat_color = self.colors["success"]
+                    elif pct > 20:
+                        bat_color = self.colors["warning"]
+                    else:
+                        bat_color = self.colors["danger"]
+                self.root.after(0, lambda t=bat_text, c=bat_color: self.sys_labels["battery"].config(text=t, fg=c))
+            else:
+                self.root.after(0, lambda: self.sys_labels["battery"].config(text="N/A (Desktop)"))
 
             # CPU
             cpu_percent = psutil.cpu_percent(interval=0.1)
@@ -1370,8 +1757,8 @@ class WellzWidget:
             self.root.after(0, lambda: self.cpu_freq_label.config(text=f"Freq: {freq_str}"))
 
             temp_str = f"{cpu_temp:.0f}C" if cpu_temp else "--"
-            temp_color = self.colors["danger"] if cpu_temp and cpu_temp > 80 else self.colors["text_dim"]
-            self.root.after(0, lambda: self.cpu_temp_label.config(text=f"Temp: {temp_str}", fg=temp_color))
+            temp_color = self._get_temp_color(cpu_temp)
+            self.root.after(0, lambda t=temp_str, c=temp_color: self.cpu_temp_label.config(text=f"Temp: {t}", fg=c))
 
             # Per-core
             for i, pct in enumerate(per_cpu[:len(self.core_bars)]):
@@ -1391,9 +1778,9 @@ class WellzWidget:
             vram_str = f"{vram_used:.0f}/{vram_total:.0f} MB" if vram_total > 0 else "--"
             self.root.after(0, lambda: self.gpu_vram_label.config(text=f"VRAM: {vram_str}"))
 
-            if gpu_temp:
-                temp_color = self.colors["danger"] if gpu_temp > 80 else self.colors["temp"]
-                self.root.after(0, lambda: self.gpu_temp_label.config(text=f"Temp: {gpu_temp:.0f}C", fg=temp_color))
+            gpu_temp_color = self._get_temp_color(gpu_temp)
+            gpu_temp_str = f"{gpu_temp:.0f}C" if gpu_temp else "--"
+            self.root.after(0, lambda t=gpu_temp_str, c=gpu_temp_color: self.gpu_temp_label.config(text=f"Temp: {t}", fg=c))
 
             # Memory
             mem = psutil.virtual_memory()
@@ -1438,11 +1825,11 @@ class WellzWidget:
             self.root.after(0, lambda: self.net_rx_label.config(text=f"RX: {format_bytes(net.bytes_recv)}"))
 
             # Processes
-            procs = self._get_top_processes(5)
+            procs = self._get_top_processes(4)
             for i, row in enumerate(self.proc_rows):
                 if i < len(procs):
                     p = procs[i]
-                    name = p['name'][:18] if p['name'] else "--"
+                    name = p['name'][:16] if p['name'] else "--"
                     cpu_p = p['cpu_percent'] or 0
                     mem_p = p['memory_percent'] or 0
                     self.root.after(0, lambda r=row, n=name, c=cpu_p, m=mem_p: (
@@ -1450,6 +1837,39 @@ class WellzWidget:
                         r["cpu"].config(text=f"{c:.1f}%"),
                         r["mem"].config(text=f"{m:.1f}%")
                     ))
+
+            # Connected Devices
+            usb_devices = self._get_usb_devices()
+            for i, row in enumerate(self.usb_rows):
+                text = usb_devices[i] if i < len(usb_devices) else "--"
+                self.root.after(0, lambda r=row, t=text: r.config(text=t))
+
+            net_ifaces = self._get_network_interfaces()
+            for i, row in enumerate(self.net_iface_rows):
+                if i < len(net_ifaces):
+                    iface = net_ifaces[i]
+                    text = f"{iface['name']}: {iface['ip']} ({iface['speed']})"
+                else:
+                    text = "--"
+                self.root.after(0, lambda r=row, t=text: r.config(text=t))
+
+            # Open Ports
+            ports = self._get_open_ports()
+            for i, row in enumerate(self.port_rows):
+                if i < len(ports):
+                    p = ports[i]
+                    self.root.after(0, lambda r=row, pt=p: (
+                        r["port"].config(text=str(pt["port"])),
+                        r["proto"].config(text=pt["proto"]),
+                        r["service"].config(text=pt["service"][:18])
+                    ))
+
+            # Security Status
+            security = self._get_security_status()
+            for key, (text, color) in security.items():
+                if key in self.security_items:
+                    self.root.after(0, lambda k=key, t=text, c=color:
+                        self.security_items[k].config(text=t, fg=c))
 
         except Exception as e:
             pass
@@ -1462,6 +1882,25 @@ class WellzWidget:
             return self.colors["warning"]
         else:
             return self.colors["danger"]
+
+    def _get_temp_color(self, temp: float) -> str:
+        """Get color based on temperature - blue (cool) to red (hot)"""
+        if temp is None:
+            return self.colors["text_dim"]
+
+        # Temperature ranges: <40C = cold/blue, 40-60 = cool/cyan, 60-75 = warm/yellow, >75 = hot/red
+        if temp < 40:
+            return "#00bfff"  # Deep sky blue - cold
+        elif temp < 50:
+            return "#00ffff"  # Cyan - cool
+        elif temp < 60:
+            return "#7fff00"  # Chartreuse - comfortable
+        elif temp < 70:
+            return "#ffff00"  # Yellow - warm
+        elif temp < 80:
+            return "#ffa500"  # Orange - hot
+        else:
+            return "#ff4444"  # Red - critical
 
     def _update_loop(self):
         """Background update loop"""
@@ -1509,6 +1948,11 @@ class WellzWidget:
                                 activebackground=self.colors["danger"])
         self.opacity_scale.configure(bg=bg, fg=text, troughcolor=bg_card)
 
+        # Footer
+        self.footer_frame.configure(bg=bg)
+        self.github_label.configure(fg=self.colors["accent"], bg=bg)
+        self.star_label.configure(fg=text_dim, bg=bg)
+
         # Update all cards
         self._apply_theme_to_card(self.sys_card, self.colors["accent"])
         self._apply_theme_to_card(self.cpu_card, self.colors["cpu"])
@@ -1516,7 +1960,10 @@ class WellzWidget:
         self._apply_theme_to_card(self.mem_card, self.colors["mem"])
         self._apply_theme_to_card(self.disk_card, self.colors["disk"])
         self._apply_theme_to_card(self.net_card, self.colors["net"])
-        self._apply_theme_to_card(self.proc_card, self.colors["accent"])
+        self._apply_theme_to_card(self.proc_card, self.colors["cpu"])
+        self._apply_theme_to_card(self.devices_card, self.colors["gpu"])
+        self._apply_theme_to_card(self.ports_card, self.colors["warning"])
+        self._apply_theme_to_card(self.security_card, self.colors["danger"])
 
         # System labels
         for lbl in self.sys_labels.values():
@@ -1573,6 +2020,22 @@ class WellzWidget:
             row["name"].configure(fg=text, bg=bg_card)
             row["cpu"].configure(fg=self.colors["cpu"], bg=bg_card)
             row["mem"].configure(fg=self.colors["mem"], bg=bg_card)
+
+        # Device rows
+        for row in self.usb_rows:
+            row.configure(fg=text, bg=bg_card)
+        for row in self.net_iface_rows:
+            row.configure(fg=text, bg=bg_card)
+
+        # Port rows
+        for row in self.port_rows:
+            row["port"].configure(fg=self.colors["warning"], bg=bg_card)
+            row["proto"].configure(fg=text_dim, bg=bg_card)
+            row["service"].configure(fg=text, bg=bg_card)
+
+        # Security items
+        for val in self.security_items.values():
+            val.configure(bg=bg_card)
 
     def _apply_theme_to_card(self, card: Dict, color: str):
         """Apply theme to a card"""

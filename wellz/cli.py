@@ -813,7 +813,7 @@ def render_dashboard(live_mode=False):
     output.append("")
     mode_str = f" {Colors.BRIGHT_GREEN}[LIVE]{Colors.RESET}" if live_mode else ""
     output.append(f"  {Colors.BRIGHT_BLACK}{'─' * 78}{Colors.RESET}")
-    output.append(f"  {Colors.BRIGHT_BLACK}Wellz v1.0.0{mode_str}  {Colors.RESET}")
+    output.append(f"  {Colors.BRIGHT_BLACK}Wellz v1.1.0{mode_str}  {Colors.RESET}")
 
     if live_mode:
         output.append(f"  {Colors.BRIGHT_BLACK}Press Ctrl+C to exit{Colors.RESET}")

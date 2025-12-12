@@ -1,8 +1,9 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/python-3.7+-green.svg" alt="Python">
+  <img src="https://img.shields.io/pypi/v/wellz.svg" alt="PyPI Version">
+  <img src="https://img.shields.io/pypi/pyversions/wellz.svg" alt="Python">
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/license-MIT-orange.svg" alt="License">
+  <img src="https://img.shields.io/pypi/l/wellz.svg" alt="License">
+  <img src="https://img.shields.io/pypi/dm/wellz.svg" alt="Downloads">
 </p>
 
 <h1 align="center">
@@ -16,6 +17,7 @@
 <p align="center">
   <a href="#features">Features</a> •
   <a href="#installation">Installation</a> •
+  <a href="#updating">Updating</a> •
   <a href="#usage">Usage</a> •
   <a href="#screenshots">Screenshots</a> •
   <a href="#configuration">Configuration</a> •
@@ -74,32 +76,65 @@ Whether you're gaming, streaming, or just want to keep an eye on your system's p
 - pip (Python package manager)
 - For GUI: Tkinter (usually pre-installed on Linux)
 
-### Quick Install
+### Quick Install (Recommended)
 
 ```bash
-# Clone the repository
-git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
-cd Live-Computer-stats-WELLZ-
-
-# Install the package
-pip install .
+# Install directly from PyPI
+pip install wellz
 ```
+
+That's it! Now you can run `wellz` or `wellz-gui` from anywhere.
 
 ### Alternative Installation Methods
 
-**Using pip with user flag (no sudo required):**
+**Install from GitHub (latest development version):**
 ```bash
-pip install . --user
+pip install git+https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
 ```
 
-**For system-wide installation:**
+**Install from source:**
 ```bash
-sudo pip install .
+git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
+cd Live-Computer-stats-WELLZ-
+pip install .
+```
+
+**Using pip with user flag (no sudo required):**
+```bash
+pip install wellz --user
 ```
 
 **Development mode:**
 ```bash
+git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
+cd Live-Computer-stats-WELLZ-
 pip install -e .
+```
+
+---
+
+## Updating
+
+### Update from PyPI
+
+```bash
+# Update to the latest version
+pip install --upgrade wellz
+```
+
+### Update from GitHub
+
+```bash
+# If installed from source
+cd Live-Computer-stats-WELLZ-
+git pull origin main
+pip install --upgrade .
+```
+
+### Check Current Version
+
+```bash
+pip show wellz
 ```
 
 ### Post-Installation

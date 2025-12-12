@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="wellz",
-    version="1.0.0",
+    version="1.1.0",
     author="Wellz26",
     author_email="wellz26@github.com",
     description="A visually artistic gaming PC stats dashboard for your terminal",

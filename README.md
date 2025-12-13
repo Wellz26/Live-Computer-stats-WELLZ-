@@ -222,42 +222,180 @@ The GUI includes security monitoring:
 
 ---
 
-## Supported Systems
+## Platform Support
 
-### Platforms
-- **Linux** - Kali, Arch, Ubuntu, Debian, Fedora, Manjaro, Mint, Pop!_OS
-- **macOS** - Full support
-- **Windows** - Full support
+### Linux (Full Support)
+
+All features work on Linux distributions including Kali, Arch, Ubuntu, Debian, Fedora, Manjaro, Mint, and Pop!_OS.
+
+```bash
+# Debian/Ubuntu/Kali
+sudo apt install python3-tk
+
+# Fedora
+sudo dnf install python3-tkinter
+
+# Arch
+sudo pacman -S tk
+
+# Install
+pip install .
+```
+
+---
+
+### macOS Installation
+
+macOS is supported with core monitoring features. Some Linux-specific security features are not available.
+
+#### Install on macOS
+
+```bash
+# Install Python 3 with tkinter (via Homebrew)
+brew install python3 python-tk@3.12
+
+# Clone and install
+git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
+cd Live-Computer-stats-WELLZ-
+
+# Create virtual environment (recommended)
+python3 -m venv venv
+source venv/bin/activate
+
+# Install
+pip install .
+pip install pillow  # For GUI logo
+```
+
+#### macOS Feature Compatibility
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| CPU Usage & Info | Works | Full support via psutil |
+| Memory (RAM/Swap) | Works | Full support |
+| Disk Usage & I/O | Works | Full support |
+| Network Stats | Works | Full support |
+| Top Processes | Works | Full support |
+| Battery | Works | Full support on MacBooks |
+| GPU Stats | Limited | No nvidia-smi on Mac (Apple Silicon/AMD not supported) |
+| USB Devices | Not Available | Uses `lsusb` (Linux-only) |
+| CPU Temperature | Limited | psutil has limited macOS support |
+| Firewall Status | Not Available | Uses `ufw`/`iptables` (Linux-only) |
+| SSH Status | Not Available | Uses `systemctl` (Linux-only) |
+| Failed Logins | Not Available | Uses `journalctl` (Linux-only) |
+| Security Updates | Not Available | Uses `apt` (Linux-only) |
+
+#### macOS PATH Fix
+
+If `wellz` command is not found:
+
+```bash
+# Add to ~/.zshrc or ~/.bash_profile
+export PATH="$HOME/.local/bin:$PATH"
+source ~/.zshrc
+```
+
+---
+
+### Windows Installation
+
+Windows is supported with core monitoring features. Linux-specific security features are not available.
+
+#### Install on Windows
+
+```powershell
+# Ensure Python 3.7+ is installed from python.org
+# tkinter is included with the standard Python installer
+
+# Clone and install
+git clone https://github.com/Wellz26/Live-Computer-stats-WELLZ-.git
+cd Live-Computer-stats-WELLZ-
+
+# Create virtual environment (recommended)
+python -m venv venv
+.\venv\Scripts\activate
+
+# Install
+pip install .
+pip install pillow  # For GUI logo
+```
+
+#### Windows Feature Compatibility
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| CPU Usage & Info | Works | Full support via psutil |
+| Memory (RAM/Swap) | Works | Full support |
+| Disk Usage & I/O | Works | Full support |
+| Network Stats | Works | Full support |
+| Top Processes | Works | Full support |
+| Battery | Works | Full support on laptops |
+| GPU Stats (NVIDIA) | Works | Requires nvidia-smi in PATH |
+| GPU Stats (AMD/Intel) | Limited | Detection only |
+| USB Devices | Not Available | Uses `lsusb` (Linux-only) |
+| CPU Temperature | Limited | psutil has limited Windows support |
+| Firewall Status | Not Available | Uses `ufw`/`iptables` (Linux-only) |
+| SSH Status | Not Available | Uses `systemctl` (Linux-only) |
+| Failed Logins | Not Available | Uses `journalctl` (Linux-only) |
+| Security Updates | Not Available | Uses `apt` (Linux-only) |
+| System Load Average | Not Available | `os.getloadavg()` unavailable on Windows |
+
+#### Windows PATH Fix
+
+If `wellz` command is not found:
+
+```powershell
+# Add Python Scripts to PATH
+# Usually: C:\Users\<username>\AppData\Local\Programs\Python\Python3x\Scripts
+```
+
+Or run directly:
+
+```powershell
+python -m wellz.cli
+python -m wellz.gui
+```
+
+---
 
 ### GPU Support
-| GPU | Support |
-|-----|---------|
-| NVIDIA | Full (usage, VRAM, temp via nvidia-smi) |
-| AMD | Detection only |
-| Intel | Detection only |
+
+| GPU | Linux | macOS | Windows |
+|-----|-------|-------|---------|
+| NVIDIA | Full (nvidia-smi) | Not Available | Full (nvidia-smi) |
+| AMD | Detection + rocm-smi | Not Available | Detection only |
+| Intel | Detection only | Not Available | Detection only |
+| Apple Silicon | N/A | Not Available | N/A |
 
 ---
 
 ## Troubleshooting
 
-### Command not found
+### Command not found (Linux/macOS)
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-### Tkinter not found
+### Tkinter not found (Linux)
 ```bash
 sudo apt install python3-tk
 ```
 
 ### No GPU stats
 ```bash
-nvidia-smi  # Check if nvidia-smi works
+nvidia-smi  # Check if nvidia-smi is installed and working
 ```
 
 ### Logo not showing
 ```bash
 pip install pillow
+```
+
+### Windows: Script not recognized
+```powershell
+# Run as module instead
+python -m wellz.cli
+python -m wellz.gui
 ```
 
 ---

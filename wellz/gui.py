@@ -20,7 +20,37 @@ try:
     from tkinter import font as tkfont
     from tkinter import ttk
 except ImportError:
-    print("Error: tkinter not available. Install python3-tk")
+    system = platform.system()
+    print("\033[91mError: tkinter not available.\033[0m\n")
+
+    if system == "Darwin":  # macOS
+        print("\033[93mmacOS Installation Options:\033[0m")
+        print("  1. Install Python with tkinter via Homebrew (recommended):")
+        print("     \033[96mbrew install python-tk@3.12\033[0m")
+        print("")
+        print("  2. Or reinstall Python with tcl-tk support:")
+        print("     \033[96mbrew install tcl-tk\033[0m")
+        print("     \033[96mbrew reinstall python\033[0m")
+        print("")
+        print("  3. Or use the official Python installer from python.org")
+        print("     (includes tkinter by default)")
+        print("")
+    elif system == "Windows":
+        print("\033[93mWindows Installation:\033[0m")
+        print("  Reinstall Python from python.org and ensure")
+        print("  'tcl/tk and IDLE' is checked during installation.")
+        print("")
+    else:  # Linux
+        print("\033[93mLinux Installation:\033[0m")
+        print("  \033[96msudo apt install python3-tk\033[0m      # Debian/Ubuntu/Kali")
+        print("  \033[96msudo dnf install python3-tkinter\033[0m # Fedora")
+        print("  \033[96msudo pacman -S tk\033[0m                # Arch")
+        print("")
+
+    print("\033[93mAlternative:\033[0m Use the terminal version instead:")
+    print("  \033[96mwellz\033[0m        # Interactive terminal dashboard")
+    print("  \033[96mwellz -s\033[0m     # Static output")
+    print("")
     sys.exit(1)
 
 try:
